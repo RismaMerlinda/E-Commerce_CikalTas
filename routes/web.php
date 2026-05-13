@@ -10,6 +10,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ChatbotController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -86,6 +87,9 @@ Route::middleware('auth')->group(function () {
     // Profil routes
     Route::get('/profil', [ProfileController::class, 'edit'])->name('profil');
     Route::patch('/profil', [ProfileController::class, 'update'])->name('profil.update');
+
+    // Chatbot AI
+    Route::post('/chatbot', [ChatbotController::class, 'ask'])->name('chatbot');
 });
 
 // Admin Routes
