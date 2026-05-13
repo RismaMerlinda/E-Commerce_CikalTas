@@ -10,76 +10,75 @@ use Illuminate\Support\Facades\Response;
 
 class ChatbotController extends Controller
 {
-    /**
-     * Handle incoming chat request.
-     * Expects JSON { "message": "user question" }
-     */
     public function ask(Request $request)
     {
-        $request->validate([
-            'message' => 'required|string',
-        ]);
-
+        $request->validate(['message' => 'required|string']);
         $question = $request->input('message');
+        $lowQ = strtolower(trim($question));
 
-        // Simple retrieval from FAQs (RAG)
-        $faq = Faq::where('question', 'like', "%{$question}%")
-            ->orderBy('created_at', 'desc')
-            ->first();
+        // --- 1. DATA TOKO ---
+        $allFaqs = Faq::all();
+        $storeData = "";
+        foreach ($allFaqs as $f) { $storeData .= "- Q: {$f->question} | A: {$f->answer}\n"; }
 
-        $context = $faq ? $faq->answer : '';
+        // --- 2. SYSTEM PROMPT (THE HUMAN BRAIN) ---
+        $systemPrompt = "Kamu adalah Cikal, admin asisten dari CikalTas. ✨🎒
+Bicaralah dengan gaya bahasa manusia yang natural, santai, dan asik. Panggil 'Kakak'.
+JANGAN PERNAH pakai template atau kalimat yang diulang-ulang.
+Jawablah secara mengalir dan nyambung dengan pertanyaan user.
+Gunakan data ini untuk jawaban teknis:
+{$storeData}";
 
-        $systemPrompt = "Kamu adalah 'Cikal Assistant', asisten virtual yang ramah, sopan, dan sangat membantu dari toko tas premium bernama 'CikalTas'. 
-Kamu menggunakan bahasa Indonesia yang santai tapi profesional. 
-Toko CikalTas menjual berbagai macam tas berkualitas premium, stylish, modern, dan nyaman digunakan untuk segala aktivitas.
-Jika ada pelanggan bertanya tentang produk, harga, atau cara pembelian, jawablah dengan antusias.
-Jika pertanyaan di luar konteks tas, fashion, atau layanan toko, tolaklah dengan sopan dengan mengatakan bahwa kamu hanya bisa membantu seputar produk CikalTas.
-Panduan cara pemesanan: Pelanggan bisa klik 'Beli Sekarang' atau tambah ke 'Keranjang' lalu checkout.
-Jika ada informasi FAQ berikut, gunakan sebagai referensi tambahan: [ {$context} ]";
-
+        // --- 3. CALL AI (REAL-TIME ENGINE) ---
         $apiKey = env('GEMINI_API_KEY');
-        if (!$apiKey) {
-            return Response::json(['reply' => 'Mohon maaf, sistem AI kami belum dikonfigurasi (GEMINI_API_KEY belum diisi di .env). Silakan hubungi admin.'], 200);
-        }
-
         $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$apiKey}";
-        $payload = [
-            'system_instruction' => [
-                'parts' => [
-                    ['text' => $systemPrompt]
-                ]
-            ],
-            'contents' => [
-                [
-                    'role' => 'user',
-                    'parts' => [
-                        ['text' => $question]
-                    ]
-                ]
-            ]
-        ];
-
+        
         try {
-            $apiResponse = Http::withoutVerifying()->timeout(30)->post($url, $payload);
-            if ($apiResponse->failed()) {
-                Log::error('Gemini API error', ['status' => $apiResponse->status(), 'body' => $apiResponse->body()]);
-                return Response::json(['reply' => 'Maaf, saya sedang mengalami gangguan koneksi. Silakan coba lagi nanti.'], 200);
-            }
-            $data = $apiResponse->json();
-            
-            // Check for valid response structure
-            if (isset($data['candidates'][0]['content']['parts'][0]['text'])) {
-                $answer = $data['candidates'][0]['content']['parts'][0]['text'];
-            } else {
-                Log::error('Unexpected Gemini Response', ['response' => $data]);
-                $answer = 'Maaf, saya tidak mengerti maksud Anda. Bisa tolong ulangi?';
+            $response = Http::withoutVerifying()->timeout(15)->post($url, [
+                'contents' => [['parts' => [['text' => $systemPrompt . "\n\nUser: " . $question]]]]
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $answer = $data['candidates'][0]['content']['parts'][0]['text'] ?? null;
+                if ($answer) return Response::json(['reply' => trim($answer)], 200);
             }
             
-            return Response::json(['reply' => trim($answer)], 200);
+            // --- 4. ULTIMATE RANDOMIZED FALLBACK (Anti-Template) ---
+            // Cari data dengan skor kecocokan tertinggi
+            $keywords = collect(explode(' ', str_replace(['?', '!', '.', ','], '', $lowQ)))->filter(fn($w) => strlen($w) > 2)->values();
+                
+            $match = $allFaqs->map(function($f) use ($keywords) {
+                $score = 0;
+                $q = strtolower($f->question);
+                foreach ($keywords as $word) { if (str_contains($q, $word)) $score += 10; }
+                $f->match_score = $score;
+                return $f;
+            })->sortByDesc('match_score')->first();
+
+            if ($match && $match->match_score >= 10) {
+                $ans = $match->answer;
+                $openers = [
+                    "Oh, kalau soal itu gini Kak... $ans ✨",
+                    "Buat yang Kakak tanya, itu $ans. Semoga jelas ya! 😊",
+                    "Ini info yang Cikal punya Kak: $ans",
+                    "Oke Kak, jadi $ans. Ada lagi yang bikin penasaran?",
+                    "Kebetulan Cikal tahu nih! $ans ✨"
+                ];
+                return Response::json(['reply' => $openers[array_rand($openers)]], 200);
+            }
+
+            // Sapaan / Hal Umum
+            $randGreet = [
+                "Halo Kak! ✨ Seneng banget bisa ketemu Kakak. Mau tanya apa nih soal tas kita?",
+                "Hai! 👋 Cikal siap bantu jawab apa aja soal tas keren kita nih. Mau Cikal spill koleksi terbaru?",
+                "Halo Kakak! 😊 Ada yang bisa Cikal bantu biar harinya makin kece pake tas baru?",
+                "Hai Kak! Cikal standby nih. Lagi cari tas buat acara apa?"
+            ];
+            return Response::json(['reply' => $randGreet[array_rand($randGreet)]], 200);
+
         } catch (\Exception $e) {
-            Log::error('Gemini request exception', ['message' => $e->getMessage()]);
-            return Response::json(['reply' => 'Maaf, terjadi kesalahan pada server kami saat memproses pesan Anda.'], 200);
+            return Response::json(['reply' => "Halo Kak! 😊 Cikal tetep standby di sini buat bantu Kakak cari tas impian. Tanya apa aja yuk!"], 200);
         }
     }
 }
-?>
