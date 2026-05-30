@@ -10,6 +10,12 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
+                    
+                    <div class="mt-6">
+                        <p class="mb-4">Berikut adalah gambar yang ada di folder public:</p>
+                        <!-- Ganti 'gambar/Logo.png' dengan nama file gambar yang baru Anda masukkan -->
+                        <img src="{{ asset('gambar/Logo.png') }}" alt="Gambar Dashboard" class="max-w-full h-auto rounded shadow-sm">
+                    </div>
                 </div>
             </div>
         </div>
