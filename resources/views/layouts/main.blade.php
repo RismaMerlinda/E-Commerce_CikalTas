@@ -427,178 +427,21 @@
             e.stopPropagation();
         });
 </script>
-    <!-- Chatbot Widget Start -->
-    <div id="chatbot-widget" class="fixed bottom-6 right-6 w-80 sm:w-96 h-[500px] bg-white border border-gray-200 rounded-2xl shadow-2xl hidden flex flex-col overflow-hidden transition-all duration-300 ease-in-out" style="z-index: 9999;">
-        <!-- Header -->
-        <div class="flex items-center justify-between text-white p-4 shadow-md" style="background: linear-gradient(135deg, #D4A574 0%, #C49A6C 50%, #B8865C 100%);">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none">
-                        <path d="M17 4H9C6.79 4 5 5.79 5 8V13C5 15.21 6.79 17 9 17H10L12 20L14 17H17C19.21 17 21 15.21 21 13V8C21 5.79 19.21 4 17 4Z" fill="rgba(255,255,255,0.3)"/>
-                        <path d="M15 7H7C4.79 7 3 8.79 3 11V16C3 18.21 4.79 20 7 20H8L10 23L12 20H15C17.21 20 19 18.21 19 16V11C19 8.79 17.21 7 15 7Z" fill="white"/>
-                        <circle cx="8.5" cy="13.5" r="1" fill="#B8865C"/>
-                        <circle cx="11" cy="13.5" r="1" fill="#B8865C"/>
-                        <circle cx="13.5" cy="13.5" r="1" fill="#B8865C"/>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-bold text-sm">Cikal Assistant</h3>
-                    <div class="flex items-center gap-1">
-                        <span class="w-2 h-2 bg-green-300 rounded-full animate-pulse"></span>
-                        <span class="text-[10px] text-green-100">Online</span>
-                    </div>
-                </div>
-            </div>
-            <button type="button" onclick="closeChatbot()" class="p-1 hover:bg-white/20 rounded-full transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
-
-        <!-- Messages Area -->
-        <div id="chatbot-messages" class="flex-1 p-4 overflow-y-auto bg-[#f8f9fa] chatbot-scroll flex flex-col">
-            <div class="message-row ai">
-                <div class="bubble ai-bubble shadow-sm">
-                    Halo! Saya Cikal Assistant. Ada yang bisa saya bantu terkait produk CikalTas?
-                    <span class="message-time">Baru saja</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Input Area -->
-        <div class="p-4 bg-white border-t border-gray-100">
-            <form id="chatbot-form" class="flex items-center gap-2" onsubmit="sendMessage(event)">
-                <input type="text" id="chatbot-input" 
-                    class="flex-1 border-none bg-gray-100 rounded-full px-4 py-2 text-sm focus:ring-2 focus:ring-[#D4A574] focus:outline-none" 
-                    placeholder="Ketik pesan..." required />
-                <button type="submit" class="text-white p-2.5 rounded-full hover:scale-110 active:scale-95 transition-all shadow-md flex items-center justify-center" style="background: linear-gradient(135deg, #D4A574, #C49A6C);">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                    </svg>
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Toggle Button -->
-
-    <button id="chatbot-toggle" onclick="openChatbot()" class="chatbot-toggle-glow fixed bottom-6 right-6 w-16 h-16 rounded-full flex items-center justify-center transition-transform duration-300" style="z-index: 9998;">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white drop-shadow-md" viewBox="0 0 32 32" fill="none">
-            <!-- Back bubble -->
-            <path d="M22 6H12C9.79 6 8 7.79 8 10V16C8 18.21 9.79 20 12 20H13L15 23L17 20H22C24.21 20 26 18.21 26 16V10C26 7.79 24.21 6 22 6Z" fill="rgba(255,255,255,0.35)"/>
-            <!-- Front bubble -->
-            <path d="M20 10H10C7.79 10 6 11.79 6 14V20C6 22.21 7.79 24 10 24H11L13 27L15 24H20C22.21 24 24 22.21 24 20V14C24 11.79 22.21 10 20 10Z" fill="white"/>
-            <!-- Dots -->
-            <circle cx="11.5" cy="17" r="1.2" fill="#B8865C"/>
-            <circle cx="15" cy="17" r="1.2" fill="#B8865C"/>
-            <circle cx="18.5" cy="17" r="1.2" fill="#B8865C"/>
-        </svg>
-        <!-- Green online dot - nempel di buletan -->
-        <span class="chatbot-online-dot"></span>
-        <!-- Notification badge - angka jumlah chat -->
-        <span id="chatbot-notif" class="chatbot-notif-badge">0</span>
-    </button>
-    <!-- Chatbot Widget End -->
-
-    <script>
-        // Unread notification counter
-        let unreadCount = 0;
-        const chatbotWidget = document.getElementById('chatbot-widget');
-
-        function incrementNotif() {
-            if (chatbotWidget && chatbotWidget.classList.contains('hidden')) {
-                unreadCount++;
-                const badge = document.getElementById('chatbot-notif');
-                if (badge) {
-                    badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
-                    badge.classList.add('show');
-                }
-            }
-        }
-
-        function clearNotif() {
-            unreadCount = 0;
-            const badge = document.getElementById('chatbot-notif');
-            badge.textContent = '0';
-            badge.classList.remove('show');
-        }
-
-        function openChatbot() {
-            document.getElementById('chatbot-widget').classList.remove('hidden');
-            document.getElementById('chatbot-toggle').style.display = 'none';
-            clearNotif();
-        }
-        function closeChatbot() {
-            document.getElementById('chatbot-widget').classList.add('hidden');
-            document.getElementById('chatbot-toggle').style.display = 'flex';
-        }
-        async function sendMessage(e) {
-            e.preventDefault();
-            const input = document.getElementById('chatbot-input');
-            const message = input.value.trim();
-            if (!message) return;
-            // User bubble
-            appendMessage('user', message);
-            input.value = '';
-            // Show typing indicator
-            const typingId = 'typing-' + Date.now();
-            appendTypingIndicator(typingId);
-            try {
-                const response = await fetch('{{ route('chatbot') }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({ message })
-                });
-                const data = await response.json();
-                removeTypingIndicator(typingId);
-                appendMessage('ai', data.reply || data.answer || 'Maaf, tidak ada jawaban.');
-                incrementNotif();
-            } catch (err) {
-                removeTypingIndicator(typingId);
-                appendMessage('ai', 'Maaf, terjadi kesalahan koneksi.');
-                incrementNotif();
-            }
-        }
-        function appendMessage(role, text) {
-            const container = document.getElementById('chatbot-messages');
-            const row = document.createElement('div');
-            row.className = `message-row ${role}`;
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-            row.innerHTML = `
-                <div class="bubble ${role}-bubble">
-                    ${text}
-                    <span class="message-time text-right">${timeStr}</span>
-                </div>
-            `;
-            container.appendChild(row);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function appendTypingIndicator(id) {
-            const container = document.getElementById('chatbot-messages');
-            const row = document.createElement('div');
-            row.id = id;
-            row.className = 'message-row ai';
-            row.innerHTML = `
-                <div class="bubble ai-bubble flex gap-1 items-center py-3">
-                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce"></span>
-                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                    <span class="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
-                </div>
-            `;
-            container.appendChild(row);
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function removeTypingIndicator(id) {
-            const el = document.getElementById(id);
-            if (el) el.remove();
-        }
+    <!-- Voiceflow Chatbot Integration -->
+    <script type="text/javascript">
+      (function(d, t) {
+          var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+          v.onload = function() {
+            window.voiceflow.chat.load({
+              verify: { projectID: '6a1a8811bd2a8f7a1f74ec04' },
+              url: 'https://general-runtime.voiceflow.com',
+              voice: {
+                url: "https://runtime-api.voiceflow.com"
+              }
+            });
+          }
+          v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+      })(document, 'script');
     </script>
 </body>
 
