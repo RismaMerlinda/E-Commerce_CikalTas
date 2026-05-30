@@ -437,6 +437,13 @@
               url: 'https://general-runtime.voiceflow.com',
               voice: {
                 url: "https://runtime-api.voiceflow.com"
+              },
+              theme: {
+                name: 'Cikaltas Assistant',
+                description: 'Online',
+                color: '#B8865C',
+                avatar: '/gambar/Logo.png',
+                logo: '/gambar/Logo.png'
               }
             });
           }
