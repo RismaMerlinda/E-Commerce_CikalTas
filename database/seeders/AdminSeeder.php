@@ -15,17 +15,19 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
         // Create admin user
-        User::create([
-            'nama_lengkap' => 'Administrator',
-            'email' => 'admin@cikaltas.com',
-            'password' => Hash::make('admin123'),
-            'role' => 'admin',
-            'nomor_telepon' => '081234567890',
-            'provinsi_kota' => 'Jakarta',
-            'alamat_jalan' => 'Jl. Admin No. 1',
-            'detail_lainnya' => 'Kantor Pusat CikalTas',
-            'email_verified_at' => now(),
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@cikaltas.com'],
+            [
+                'nama_lengkap' => 'Administrator',
+                'password' => Hash::make('admin123'),
+                'role' => 'admin',
+                'nomor_telepon' => '081234567890',
+                'provinsi_kota' => 'Jakarta',
+                'alamat_jalan' => 'Jl. Admin No. 1',
+                'detail_lainnya' => 'Kantor Pusat CikalTas',
+                'email_verified_at' => now(),
+            ]
+        );
 
         $this->command->info('Admin user created successfully!');
         $this->command->info('Email: admin@cikaltas.com');

@@ -2,18 +2,20 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Note: SQLite tidak mendukung MODIFY COLUMN. Status sudah didefinisikan
+     * lengkap di create_orders_table migration.
      */
     public function up(): void
     {
-        // Alter ENUM to add 'completed' and 'processing' status
-        DB::statement("ALTER TABLE `orders` MODIFY COLUMN `status` ENUM('pending', 'paid', 'processing', 'completed', 'failed', 'expired', 'cancelled') DEFAULT 'pending'");
+        // SQLite tidak support ALTER TABLE MODIFY COLUMN.
+        // Status 'processing' dan 'completed' sudah ditambahkan ke migration awal.
+        // Migration ini dibiarkan kosong agar kompatibel dengan SQLite.
     }
 
     /**
@@ -21,7 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Revert back to original ENUM values
-        DB::statement("ALTER TABLE `orders` MODIFY COLUMN `status` ENUM('pending', 'paid', 'failed', 'expired', 'cancelled') DEFAULT 'pending'");
+        // No-op
     }
 };

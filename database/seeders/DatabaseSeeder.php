@@ -17,18 +17,22 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::create([
-            'nama_lengkap' => 'Lucinta Luna',
-            'email' => 'lucinta@cikaltas.com',
-            'password' => bcrypt('password'),
-            'nomor_telepon' => '081234567890',
-            'provinsi_kota' => 'Jakarta',
-            'alamat_jalan' => 'Jl. Contoh No. 123',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'lucinta@cikaltas.com'],
+            [
+                'nama_lengkap' => 'Lucinta Luna',
+                'password' => bcrypt('password'),
+                'nomor_telepon' => '081234567890',
+                'provinsi_kota' => 'Jakarta',
+                'alamat_jalan' => 'Jl. Contoh No. 123',
+            ]
+        );
 
-        // Seed products
+        // Seed products, admins, dan FAQs
         $this->call([
+            AdminSeeder::class,
             ProductSeeder::class,
+            FaqSeeder::class,
         ]);
     }
 }

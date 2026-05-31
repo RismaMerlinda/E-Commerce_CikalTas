@@ -108,12 +108,17 @@
             justify-content: flex-start;
         }
         .bubble {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 18px;
-            font-size: 14px;
+            display: inline-block;
+            padding: 8px 12px;
+            border-radius: 14px;
+            font-size: 13px;
             line-height: 1.4;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            white-space: normal;
+            width: auto;
+            max-width: 100%;
+            word-break: break-word;
+            overflow-wrap: anywhere;
         }
         .user-bubble {
             background: linear-gradient(135deg, #D4A574, #C49A6C);
@@ -126,59 +131,11 @@
             border-bottom-left-radius: 4px;
         }
         .message-time {
-            font-size: 10px;
-            margin-top: 4px;
-            opacity: 0.7;
-            display: block;
-            text-align: right;
-        }
-
-
-        /* Chatbot Custom Styles */
-        .chatbot-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .chatbot-scroll::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .chatbot-scroll::-webkit-scrollbar-thumb {
-            background: #d1d1d1;
-            border-radius: 10px;
-        }
-        .message-row {
-            display: flex;
-            width: 100%;
-            margin-bottom: 12px;
-        }
-        .message-row.user {
-            justify-content: flex-end;
-        }
-        .message-row.ai {
-            justify-content: flex-start;
-        }
-        .bubble {
-            max-width: 80%;
-            padding: 10px 14px;
-            border-radius: 18px;
-            font-size: 14px;
-            line-height: 1.4;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        .user-bubble {
-            background: linear-gradient(135deg, #D4A574, #C49A6C);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-        .ai-bubble {
-            background-color: #f0f0f0;
-            color: #333;
-            border-bottom-left-radius: 4px;
-        }
-        .message-time {
-            font-size: 10px;
-            margin-top: 4px;
-            opacity: 0.7;
-            display: block;
+            font-size: 9.5px;
+            margin-top: 2px;
+            opacity: 0.6;
+            color: #6b7280;
+            display: inline-block;
         }
 
         /* Chatbot toggle heartbeat animation */
@@ -201,19 +158,19 @@
         /* Notification badge */
         .chatbot-notif-badge {
             position: absolute;
-            top: -4px;
-            left: -4px;
-            min-width: 20px;
-            height: 20px;
+            top: -3px;
+            left: -3px;
+            min-width: 16px;
+            height: 16px;
             background: #EF4444;
             color: white;
-            font-size: 11px;
+            font-size: 9px;
             font-weight: 700;
             border-radius: 999px;
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 0 5px;
+            padding: 0 4px;
             border: 2px solid white;
             box-shadow: 0 2px 6px rgba(239,68,68,0.4);
             line-height: 1;
@@ -224,14 +181,14 @@
         /* Green online dot */
         .chatbot-online-dot {
             position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 16px;
-            height: 16px;
+            top: -1px;
+            right: -1px;
+            width: 12px;
+            height: 12px;
             background: #22C55E;
             border-radius: 999px;
-            border: 3px solid white;
-            box-shadow: 0 0 8px rgba(34,197,94,0.6);
+            border: 2px solid white;
+            box-shadow: 0 0 6px rgba(34,197,94,0.6);
         }
     </style>
 </head>
@@ -409,7 +366,7 @@
     <script>
         function toggleDropdown() {
             const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('show');
+            if (dropdown) dropdown.classList.toggle('show');
         }
 
         // Close dropdown when clicking outside
@@ -417,7 +374,7 @@
             const dropdown = document.getElementById('userDropdown');
             const toggle = document.querySelector('.dropdown-toggle');
 
-            if (!toggle.contains(e.target) && !dropdown.contains(e.target)) {
+            if (dropdown && toggle && !toggle.contains(e.target) && !dropdown.contains(e.target)) {
                 dropdown.classList.remove('show');
             }
         });
@@ -426,7 +383,79 @@
         document.getElementById('userDropdown').addEventListener('click', function(e) {
             e.stopPropagation();
         });
-</script>
+    </script>
+    
+    <!-- Chatbot Widget Start -->
+    <div id="chatbot-widget" class="fixed flex flex-col bg-white border border-gray-200 shadow-2xl overflow-hidden transition-all duration-300 ease-in-out" style="z-index: 9999; display: none; bottom: 16px; right: 16px; width: 310px; height: 370px; border-radius: 16px;">
+        <!-- Header -->
+        <div class="flex items-center justify-between text-white p-2.5 shadow-md" style="background: linear-gradient(135deg, #D4A574 0%, #C49A6C 50%, #B8865C 100%);">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <path d="M17 4H9C6.79 4 5 5.79 5 8V13C5 15.21 6.79 17 9 17H10L12 20L14 17H17C19.21 17 21 15.21 21 13V8C21 5.79 19.21 4 17 4Z" fill="rgba(255,255,255,0.3)"/>
+                        <path d="M15 7H7C4.79 7 3 8.79 3 11V16C3 18.21 4.79 20 7 20H8L10 23L12 20H15C17.21 20 19 18.21 19 16V11C19 8.79 17.21 7 15 7Z" fill="white"/>
+                        <circle cx="8.5" cy="13.5" r="1" fill="#B8865C"/>
+                        <circle cx="11" cy="13.5" r="1" fill="#B8865C"/>
+                        <circle cx="13.5" cy="13.5" r="1" fill="#B8865C"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-bold text-[11px] leading-tight">Cikal Assistant</h3>
+                    <div class="flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 bg-green-300 rounded-full animate-pulse"></span>
+                        <span class="text-[8px] text-green-100">Online</span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" onclick="closeChatbot()" class="p-0.5 hover:bg-white/20 rounded-full transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Messages Area -->
+        <div id="chatbot-messages" class="flex-1 p-2.5 overflow-y-auto bg-[#f8f9fa] chatbot-scroll flex flex-col gap-2">
+            <div class="message-row ai">
+                <div class="flex flex-col items-start max-w-[70%]">
+                    <div class="bubble ai-bubble shadow-sm">Halo! Saya Cikal Assistant. Ada yang bisa saya bantu terkait produk CikalTas?</div>
+                    <span class="message-time ml-1">Baru saja</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="p-2 bg-white border-t border-gray-100 flex flex-col">
+            <a href="{{ route('support.index') }}" class="text-[10px] text-center text-[#D4A574] hover:underline mb-2 font-medium">
+                Butuh bantuan manusia? Hubungi Admin
+            </a>
+            <form id="chatbot-form" class="flex items-center gap-1.5" onsubmit="sendMessage(event)">
+                <input type="text" id="chatbot-input" 
+                    class="flex-1 border-none bg-gray-100 rounded-full px-2.5 py-1 text-[11px] focus:ring-1 focus:ring-[#D4A574] focus:outline-none" 
+                    placeholder="Ketik pesan..." required />
+                <button type="submit" class="text-white p-1.5 rounded-full hover:scale-105 active:scale-95 transition-all shadow-md flex items-center justify-center" style="background: linear-gradient(135deg, #D4A574, #C49A6C);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toggle Button -->
+    <button id="chatbot-toggle" onclick="openChatbot()" class="chatbot-toggle-glow" style="z-index: 9998; position: fixed; bottom: 16px; right: 16px; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; outline: none; cursor: pointer; transition: transform 0.3s;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white drop-shadow-md" viewBox="0 0 32 32" fill="none">
+            <path d="M22 6H12C9.79 6 8 7.79 8 10V16C8 18.21 9.79 20 12 20H13L15 23L17 20H22C24.21 20 26 18.21 26 16V10C26 7.79 24.21 6 22 6Z" fill="rgba(255,255,255,0.35)"/>
+            <path d="M20 10H10C7.79 10 6 11.79 6 14V20C6 22.21 7.79 24 10 24H11L13 27L15 24H20C22.21 24 24 22.21 24 20V14C24 11.79 22.21 10 20 10Z" fill="white"/>
+            <circle cx="11.5" cy="17" r="1.2" fill="#B8865C"/>
+            <circle cx="15" cy="17" r="1.2" fill="#B8865C"/>
+            <circle cx="18.5" cy="17" r="1.2" fill="#B8865C"/>
+        </svg>
+        <span class="chatbot-online-dot"></span>
+        <span id="chatbot-notif" class="chatbot-notif-badge">0</span>
+    </button>
+    <!-- Chatbot Widget End -->
+
     <!-- Voiceflow Chatbot Integration -->
     <script type="text/javascript">
       (function(d, t) {
@@ -449,6 +478,259 @@
           }
           v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
       })(document, 'script');
+    </script>
+
+    <script>
+        // Safe LocalStorage wrapper
+        const safeLocalStorage = {
+            getItem(key) {
+                try {
+                    return localStorage.getItem(key);
+                } catch (e) {
+                    return null;
+                }
+            },
+            setItem(key, value) {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (e) {}
+            }
+        };
+
+        // Chatbot Widget State
+        let unreadCount = 0;
+        let displayedMessageIds = new Set();
+        let totalAdminReplies = 0;
+
+        function formatTime(isoString) {
+            if (!isoString) return 'Baru saja';
+            try {
+                const date = new Date(isoString);
+                return date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
+            } catch (e) {
+                return 'Baru saja';
+            }
+        }
+
+        function clearNotif() {
+            unreadCount = 0;
+            const badge = document.getElementById('chatbot-notif');
+            if (badge) {
+                badge.textContent = '0';
+                badge.style.display = 'none';
+            }
+        }
+
+        function openChatbot() {
+            const widget = document.getElementById('chatbot-widget');
+            const toggle = document.getElementById('chatbot-toggle');
+            if (widget) widget.style.display = 'flex';
+            if (toggle) toggle.style.display = 'none';
+            clearNotif();
+
+            const seenCount = safeLocalStorage.getItem('seen_admin_replies_count') || 0;
+            if (totalAdminReplies > seenCount) {
+                safeLocalStorage.setItem('seen_admin_replies_count', totalAdminReplies);
+            }
+
+            loadHistory();
+        }
+
+        function closeChatbot() {
+            const widget = document.getElementById('chatbot-widget');
+            const toggle = document.getElementById('chatbot-toggle');
+            if (widget) widget.style.display = 'none';
+            if (toggle) toggle.style.display = 'flex';
+        }
+
+        async function loadHistory() {
+            const container = document.getElementById('chatbot-messages');
+            if (!container) return;
+
+            container.innerHTML = `
+                <div class="message-row ai">
+                    <div class="flex flex-col items-start max-w-[70%]">
+                        <div class="bubble ai-bubble shadow-sm">Halo! Saya Cikal Assistant. Ada yang bisa saya bantu terkait produk CikalTas?</div>
+                        <span class="message-time ml-1">Baru saja</span>
+                    </div>
+                </div>
+            `;
+
+            displayedMessageIds.clear();
+
+            try {
+                const response = await fetch('{{ route('chatbot.history') }}');
+                if (response.ok) {
+                    const messages = await response.json();
+                    let adminRepliesCount = 0;
+
+                    messages.forEach(msg => {
+                        displayedMessageIds.add(msg.id);
+                        if (msg.sender_type === 'user') {
+                            appendMessage('user', msg.message, formatTime(msg.created_at));
+                        } else if (msg.sender_type === 'admin') {
+                            appendMessage('ai', `🧑‍💼 **Admin:** ${msg.message}`, formatTime(msg.created_at));
+                            adminRepliesCount++;
+                        } else {
+                            appendMessage('ai', msg.message, formatTime(msg.created_at));
+                        }
+                    });
+
+                    totalAdminReplies = adminRepliesCount;
+                    safeLocalStorage.setItem('seen_admin_replies_count', totalAdminReplies);
+                }
+            } catch (err) {
+                console.error("Error loading chatbot history:", err);
+            }
+        }
+
+        async function checkNewMessages() {
+            try {
+                const chatbotWidget = document.getElementById('chatbot-widget');
+                if (!chatbotWidget) return;
+
+                const response = await fetch('{{ route('chatbot.history') }}');
+                if (!response.ok) return;
+
+                const messages = await response.json();
+                const isWidgetOpen = chatbotWidget.style.display === 'flex';
+
+                let adminRepliesCount = 0;
+                let newRepliesFound = false;
+
+                messages.forEach(msg => {
+                    if (msg.sender_type === 'admin') {
+                        adminRepliesCount++;
+                    }
+
+                    if (isWidgetOpen) {
+                        if (!displayedMessageIds.has(msg.id)) {
+                            displayedMessageIds.add(msg.id);
+                            if (msg.sender_type === 'user') {
+                                appendMessage('user', msg.message, formatTime(msg.created_at));
+                            } else if (msg.sender_type === 'admin') {
+                                appendMessage('ai', `🧑‍💼 **Admin:** ${msg.message}`, formatTime(msg.created_at));
+                            } else {
+                                appendMessage('ai', msg.message, formatTime(msg.created_at));
+                            }
+                            newRepliesFound = true;
+                        }
+                    }
+                });
+
+                totalAdminReplies = adminRepliesCount;
+                const seenCount = parseInt(safeLocalStorage.getItem('seen_admin_replies_count') || '0', 10);
+
+                if (isWidgetOpen) {
+                    safeLocalStorage.setItem('seen_admin_replies_count', totalAdminReplies);
+                    if (newRepliesFound) {
+                        const container = document.getElementById('chatbot-messages');
+                        if (container) container.scrollTop = container.scrollHeight;
+                    }
+                } else {
+                    if (totalAdminReplies > seenCount) {
+                        unreadCount = totalAdminReplies - seenCount;
+                        const badge = document.getElementById('chatbot-notif');
+                        if (badge) {
+                            badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                            badge.style.display = 'flex';
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error("Error checking new messages:", err);
+            }
+        }
+
+        async function sendMessage(e) {
+            e.preventDefault();
+            const input = document.getElementById('chatbot-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            appendMessage('user', message);
+            input.value = '';
+            const typingId = 'typing-' + Date.now();
+            appendTypingIndicator(typingId);
+
+            try {
+                const response = await fetch('{{ route('chatbot') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ message })
+                });
+                const data = await response.json();
+                removeTypingIndicator(typingId);
+                appendMessage('ai', data.reply || data.answer || 'Maaf, tidak ada jawaban.');
+                checkNewMessages();
+            } catch (err) {
+                removeTypingIndicator(typingId);
+                appendMessage('ai', 'Maaf, terjadi kesalahan koneksi.');
+            }
+        }
+
+        function escapeHtml(text) {
+            const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        function appendMessage(role, text, timeStr) {
+            const container = document.getElementById('chatbot-messages');
+            const row = document.createElement('div');
+            row.className = `message-row ${role}`;
+            if (!timeStr) {
+                const now = new Date();
+                timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+            }
+            let formattedText = escapeHtml(text);
+            formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            formattedText = formattedText.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" class="underline font-semibold hover:opacity-85 text-amber-800" style="color: inherit;">${url}</a>`;
+            });
+            const alignClass = role === 'user' ? 'items-end' : 'items-start';
+            const marginClass = role === 'user' ? 'mr-1' : 'ml-1';
+            row.innerHTML = `
+                <div class="flex flex-col ${alignClass} max-w-[70%]">
+                    <div class="bubble ${role}-bubble shadow-sm">${formattedText}</div>
+                    <span class="message-time ${marginClass}">${timeStr}</span>
+                </div>
+            `;
+            container.appendChild(row);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function appendTypingIndicator(id) {
+            const container = document.getElementById('chatbot-messages');
+            const row = document.createElement('div');
+            row.id = id;
+            row.className = 'message-row ai';
+            row.innerHTML = `
+                <div class="flex flex-col items-start max-w-[70%]">
+                    <div class="bubble ai-bubble flex gap-1 items-center py-2 px-3">
+                        <span class="w-1.2 h-1.2 bg-gray-400 rounded-full animate-bounce"></span>
+                        <span class="w-1.2 h-1.2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                        <span class="w-1.2 h-1.2 bg-gray-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                    </div>
+                </div>
+            `;
+            container.appendChild(row);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function removeTypingIndicator(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        setInterval(checkNewMessages, 10000);
+        window.addEventListener('DOMContentLoaded', checkNewMessages);
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            checkNewMessages();
+        }
     </script>
 </body>
 

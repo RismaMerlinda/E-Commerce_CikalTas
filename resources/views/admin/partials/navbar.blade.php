@@ -22,6 +22,10 @@
                     style="text-decoration:none; padding:8px 12px; border-radius:10px; font-weight:600; {{ request()->routeIs('admin.sales-report') ? 'background-color:#664229;color:#ffffff;' : 'background-color:transparent;color:#664229;' }}">
                     Laporan
                 </a>
+                <a href="{{ route('admin.messages.index') }}"
+                    style="text-decoration:none; padding:8px 12px; border-radius:10px; font-weight:600; {{ request()->routeIs('admin.messages.*') ? 'background-color:#664229;color:#ffffff;' : 'background-color:transparent;color:#664229;' }}">
+                    💬 Customer Support
+                </a>
             </div>
         </div>
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('order_id')->unique(); // Midtrans Order ID
             $table->decimal('gross_amount', 15, 2);
-            $table->enum('status', ['pending', 'paid', 'failed', 'expired', 'cancelled'])->default('pending');
+            $table->enum('status', ['pending', 'paid', 'processing', 'completed', 'failed', 'expired', 'cancelled'])->default('pending');
             $table->string('payment_type')->nullable();
             $table->string('transaction_id')->nullable();
             $table->timestamp('paid_at')->nullable();

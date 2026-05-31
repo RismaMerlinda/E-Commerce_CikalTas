@@ -167,6 +167,12 @@
                 <h3>Laporan Penjualan</h3>
                 <p>Lihat statistik dan laporan penjualan toko</p>
             </a>
+
+            <a href="{{ route('admin.messages.index') }}" class="menu-card">
+                <div class="menu-icon">💬</div>
+                <h3>Pesan Pelanggan</h3>
+                <p>Lihat dan balas pesan dari pelanggan melalui chatbot</p>
+            </a>
         </div>
     </div>
 

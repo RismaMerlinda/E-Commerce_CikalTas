@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
+use App\Http\Controllers\Admin\MessageController as AdminMessageController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\SalesReportController as AdminSalesReportController;
@@ -90,6 +91,13 @@ Route::middleware('auth')->group(function () {
 
     // Chatbot AI
     Route::post('/chatbot', [ChatbotController::class, 'ask'])->name('chatbot');
+    Route::get('/chatbot/history', [ChatbotController::class, 'history'])->name('chatbot.history');
+
+    // Customer Support (User Side)
+    Route::get('/support', [App\Http\Controllers\SupportController::class, 'index'])->name('support.index');
+    Route::post('/support/reply', [App\Http\Controllers\SupportController::class, 'reply'])->name('support.reply');
+    Route::get('/support/fetch', [App\Http\Controllers\SupportController::class, 'fetchMessages'])->name('support.fetch');
+    Route::post('/support/contact-admin', [App\Http\Controllers\SupportController::class, 'contactAdmin'])->name('support.contact-admin');
 });
 
 // Admin Routes
@@ -101,6 +109,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/orders/{order}/mark-paid', [AdminOrderController::class, 'markAsPaid'])->name('orders.mark-paid');
     Route::post('/orders/{order}/mark-completed', [AdminOrderController::class, 'markAsCompleted'])->name('orders.mark-completed');
     Route::get('/sales-report', [AdminSalesReportController::class, 'index'])->name('sales-report');
+
+    // Pesan Pelanggan (Customer Support)
+    Route::get('/messages', [AdminMessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/{conversation}', [AdminMessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{conversation}/reply', [AdminMessageController::class, 'reply'])->name('messages.reply');
 });
 
 // Dashboard (protected) - redirect to beranda or admin
