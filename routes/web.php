@@ -23,7 +23,22 @@ Route::get('/', function () {
         }
         return redirect()->route('beranda');
     }
-    return redirect()->route('beranda');
+    $featuredProducts = \App\Models\Product::latest()->take(4)->get();
+    
+    // Fetch a hero product dynamically (preferring Tas Wanita or Tas Tote category from DB)
+    $heroProduct = \App\Models\Product::where('category', 'Tas Wanita')->first() 
+        ?? \App\Models\Product::where('category', 'Tas Tote')->first();
+
+    $categories = \App\Models\Product::select('category')
+        ->selectRaw('count(*) as count')
+        ->groupBy('category')
+        ->get()
+        ->map(function ($item) {
+            $firstProduct = \App\Models\Product::where('category', $item->category)->first();
+            $item->image = $firstProduct ? $firstProduct->image : null;
+            return $item;
+        });
+    return view('welcome', compact('featuredProducts', 'categories', 'heroProduct'));
 });
 
 // Auth routes (login, logout, forgot password, etc.) - Laravel Breeze or default auth

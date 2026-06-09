@@ -109,9 +109,9 @@
         }
         .bubble {
             display: inline-block;
-            padding: 8px 12px;
-            border-radius: 14px;
-            font-size: 13px;
+            padding: 9px 13px;
+            border-radius: 15px;
+            font-size: 14px;
             line-height: 1.4;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
             white-space: normal;
@@ -131,8 +131,8 @@
             border-bottom-left-radius: 4px;
         }
         .message-time {
-            font-size: 9.5px;
-            margin-top: 2px;
+            font-size: 10.5px;
+            margin-top: 3px;
             opacity: 0.6;
             color: #6b7280;
             display: inline-block;
@@ -386,24 +386,18 @@
     </script>
     
     <!-- Chatbot Widget Start -->
-    <div id="chatbot-widget" class="fixed flex flex-col bg-white border border-gray-200 shadow-2xl overflow-hidden transition-all duration-300 ease-in-out" style="z-index: 9999; display: none; bottom: 16px; right: 16px; width: 310px; height: 370px; border-radius: 16px;">
+    <div id="chatbot-widget" class="fixed flex flex-col bg-white border border-gray-200 shadow-2xl overflow-hidden transition-all duration-300 ease-in-out" style="z-index: 9999; display: none; bottom: 20px; right: 20px; width: 340px; height: 420px; border-radius: 18px;">
         <!-- Header -->
         <div class="flex items-center justify-between text-white p-2.5 shadow-md" style="background: linear-gradient(135deg, #D4A574 0%, #C49A6C 50%, #B8865C 100%);">
             <div class="flex items-center gap-2">
-                <div class="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none">
-                        <path d="M17 4H9C6.79 4 5 5.79 5 8V13C5 15.21 6.79 17 9 17H10L12 20L14 17H17C19.21 17 21 15.21 21 13V8C21 5.79 19.21 4 17 4Z" fill="rgba(255,255,255,0.3)"/>
-                        <path d="M15 7H7C4.79 7 3 8.79 3 11V16C3 18.21 4.79 20 7 20H8L10 23L12 20H15C17.21 20 19 18.21 19 16V11C19 8.79 17.21 7 15 7Z" fill="white"/>
-                        <circle cx="8.5" cy="13.5" r="1" fill="#B8865C"/>
-                        <circle cx="11" cy="13.5" r="1" fill="#B8865C"/>
-                        <circle cx="13.5" cy="13.5" r="1" fill="#B8865C"/>
-                    </svg>
+                <div class="w-7 h-7 flex items-center justify-center">
+                    <img src="{{ asset('gambar/Logo.png') }}" alt="CikalTas Logo" class="w-7 h-7 object-contain" />
                 </div>
                 <div>
-                    <h3 class="font-bold text-[11px] leading-tight">Cikal Assistant</h3>
-                    <div class="flex items-center gap-1">
-                        <span class="w-1.5 h-1.5 bg-green-300 rounded-full animate-pulse"></span>
-                        <span class="text-[8px] text-green-100">Online</span>
+                    <h3 class="font-bold text-[13px] leading-tight">Cikal Assistant</h3>
+                    <div class="flex items-center gap-1 mt-0.5">
+                        <span class="w-2 h-2 bg-green-300 rounded-full animate-pulse"></span>
+                        <span class="text-[9px] text-green-100">Online</span>
                     </div>
                 </div>
             </div>
@@ -425,16 +419,16 @@
         </div>
 
         <!-- Input Area -->
-        <div class="p-2 bg-white border-t border-gray-100 flex flex-col">
-            <a href="{{ route('support.index') }}" class="text-[10px] text-center text-[#D4A574] hover:underline mb-2 font-medium">
+        <div class="p-2.5 bg-white border-t border-gray-100 flex flex-col">
+            <a href="{{ route('support.index') }}" class="text-[11px] text-center text-[#D4A574] hover:underline mb-2 font-medium">
                 Butuh bantuan manusia? Hubungi Admin
             </a>
-            <form id="chatbot-form" class="flex items-center gap-1.5" onsubmit="sendMessage(event)">
+            <form id="chatbot-form" class="flex items-center gap-2" onsubmit="sendMessage(event)">
                 <input type="text" id="chatbot-input" 
-                    class="flex-1 border-none bg-gray-100 rounded-full px-2.5 py-1 text-[11px] focus:ring-1 focus:ring-[#D4A574] focus:outline-none" 
+                    class="flex-1 border-none bg-gray-100 rounded-full px-3 py-1.5 text-[13px] focus:ring-1 focus:ring-[#D4A574] focus:outline-none" 
                     placeholder="Ketik pesan..." required />
-                <button type="submit" class="text-white p-1.5 rounded-full hover:scale-105 active:scale-95 transition-all shadow-md flex items-center justify-center" style="background: linear-gradient(135deg, #D4A574, #C49A6C);">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <button type="submit" class="text-white p-2 rounded-full hover:scale-105 active:scale-95 transition-all shadow-md flex items-center justify-center" style="background: linear-gradient(135deg, #D4A574, #C49A6C);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
                     </svg>
                 </button>
@@ -443,8 +437,8 @@
     </div>
 
     <!-- Toggle Button -->
-    <button id="chatbot-toggle" onclick="openChatbot()" class="chatbot-toggle-glow" style="z-index: 9998; position: fixed; bottom: 16px; right: 16px; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; outline: none; cursor: pointer; transition: transform 0.3s;">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white drop-shadow-md" viewBox="0 0 32 32" fill="none">
+    <button id="chatbot-toggle" onclick="openChatbot()" class="chatbot-toggle-glow" style="z-index: 9998; position: fixed; bottom: 20px; right: 20px; width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; outline: none; cursor: pointer; transition: transform 0.3s;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white drop-shadow-md" viewBox="0 0 32 32" fill="none">
             <path d="M22 6H12C9.79 6 8 7.79 8 10V16C8 18.21 9.79 20 12 20H13L15 23L17 20H22C24.21 20 26 18.21 26 16V10C26 7.79 24.21 6 22 6Z" fill="rgba(255,255,255,0.35)"/>
             <path d="M20 10H10C7.79 10 6 11.79 6 14V20C6 22.21 7.79 24 10 24H11L13 27L15 24H20C22.21 24 24 22.21 24 20V14C24 11.79 22.21 10 20 10Z" fill="white"/>
             <circle cx="11.5" cy="17" r="1.2" fill="#B8865C"/>
@@ -456,29 +450,7 @@
     </button>
     <!-- Chatbot Widget End -->
 
-    <!-- Voiceflow Chatbot Integration -->
-    <script type="text/javascript">
-      (function(d, t) {
-          var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-          v.onload = function() {
-            window.voiceflow.chat.load({
-              verify: { projectID: '6a1a8811bd2a8f7a1f74ec04' },
-              url: 'https://general-runtime.voiceflow.com',
-              voice: {
-                url: "https://runtime-api.voiceflow.com"
-              },
-              theme: {
-                name: 'Cikaltas Assistant',
-                description: 'Online',
-                color: '#B8865C',
-                avatar: '/gambar/Logo.png',
-                logo: '/gambar/Logo.png'
-              }
-            });
-          }
-          v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
-      })(document, 'script');
-    </script>
+
 
     <script>
         // Safe LocalStorage wrapper
