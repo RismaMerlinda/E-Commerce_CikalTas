@@ -5,7 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'CikalTas') }}</title>
+    <title>{{ $title ?? 'CikalTas — Premium Bags for Modern Lifestyle' }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('gambar/Logo.png') }}">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -198,7 +199,8 @@
         <div class="flex flex-1">
             <!-- Sidebar -->
             <aside class="w-64 bg-white border-r border-gray-200 shadow-[6px_0_16px_rgba(0,0,0,0.06)]">
-                <div class="p-6">
+                <div class="p-6 flex items-center gap-3">
+                    <img src="{{ asset('gambar/Logo.png') }}" alt="CikalTas Logo" class="w-8 h-8 object-contain">
                     <h1 class="text-2xl font-bold text-gray-800">CikalTas</h1>
                 </div>
 

@@ -53,12 +53,18 @@ class PaymentController extends Controller
                 'token_id' => 'nullable|string',
             ]);
 
+            \Log::info('Payment request received', [
+                'user_id' => Auth::id(),
+                'payment_type' => $validated['payment_type']
+            ]);
+
             // Get cart items
             $cartItems = Cart::with('product')
                 ->where('user_id', Auth::id())
                 ->get();
 
             if ($cartItems->isEmpty()) {
+                \Log::warning('Cart empty for user', ['user_id' => Auth::id()]);
                 return response()->json([
                     'success' => false,
                     'message' => 'Keranjang Anda kosong'
@@ -73,6 +79,13 @@ class PaymentController extends Controller
             // Generate unique order ID
             $orderId = 'ORDER-' . time() . '-' . Auth::id();
 
+            \Log::info('Creating order', [
+                'order_id' => $orderId,
+                'user_id' => Auth::id(),
+                'gross_amount' => $grossAmount,
+                'items_count' => $cartItems->count()
+            ]);
+
             // Create order
             $order = Order::create([
                 'user_id' => Auth::id(),
@@ -81,7 +94,13 @@ class PaymentController extends Controller
                 'status' => 'pending',
             ]);
 
+            \Log::info('Order created successfully', [
+                'order_id' => $order->order_id,
+                'db_id' => $order->id
+            ]);
+
             // Create order items
+            $createdItems = 0;
             foreach ($cartItems as $cartItem) {
                 OrderItem::create([
                     'order_id' => $order->id,
@@ -89,7 +108,13 @@ class PaymentController extends Controller
                     'quantity' => $cartItem->quantity,
                     'price' => $cartItem->product->price,
                 ]);
+                $createdItems++;
             }
+
+            \Log::info('Order items created', [
+                'order_id' => $order->order_id,
+                'items_created' => $createdItems
+            ]);
 
             // Prepare transaction details for Midtrans
             $transactionDetails = [
@@ -170,8 +195,18 @@ class PaymentController extends Controller
                 ];
             }
 
+            \Log::info('Sending to Midtrans', [
+                'order_id' => $orderId,
+                'payment_type' => $validated['payment_type']
+            ]);
+
             $chargeResponse = CoreApi::charge($chargeParams);
             $chargeResponseArr = json_decode(json_encode($chargeResponse), true);
+
+            \Log::info('Midtrans response received', [
+                'order_id' => $orderId,
+                'transaction_status' => $chargeResponseArr['transaction_status'] ?? null
+            ]);
 
             $transactionStatus = $chargeResponseArr['transaction_status'] ?? null;
             $mappedStatus = 'pending';
@@ -193,10 +228,20 @@ class PaymentController extends Controller
                 'midtrans_response' => $chargeResponseArr,
             ]);
 
+            \Log::info('Order status updated', [
+                'order_id' => $orderId,
+                'status' => $mappedStatus
+            ]);
+
             // Clear cart after creating order
             Cart::where('user_id', Auth::id())->delete();
 
             DB::commit();
+
+            \Log::info('Payment transaction completed successfully', [
+                'order_id' => $orderId,
+                'status' => $mappedStatus
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -207,6 +252,12 @@ class PaymentController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+
+            \Log::error('Payment transaction failed', [
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
 
             return response()->json([
                 'success' => false,
@@ -569,5 +620,63 @@ class PaymentController extends Controller
                 'message' => 'Error: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    /**
+     * API endpoint untuk melihat semua orders user
+     */
+    public function getOrders()
+    {
+        $orders = Order::with(['orderItems.product', 'user'])
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'order_id' => $order->order_id,
+                    'status' => $order->status,
+                    'gross_amount' => $order->gross_amount,
+                    'payment_type' => $order->payment_type,
+                    'paid_at' => $order->paid_at,
+                    'created_at' => $order->created_at,
+                    'items_count' => $order->orderItems->count(),
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => $orders
+        ]);
+    }
+
+    /**
+     * API endpoint untuk cek total orders di database
+     */
+    public function getOrdersCount()
+    {
+        $totalOrders = Order::count();
+        $totalAmount = Order::sum('gross_amount');
+        $paidOrders = Order::where('status', 'paid')->count();
+        $pendingOrders = Order::where('status', 'pending')->count();
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'total_orders' => $totalOrders,
+                'total_amount' => $totalAmount,
+                'paid_orders' => $paidOrders,
+                'pending_orders' => $pendingOrders,
+                'by_status' => [
+                    'pending' => Order::where('status', 'pending')->count(),
+                    'paid' => Order::where('status', 'paid')->count(),
+                    'processing' => Order::where('status', 'processing')->count(),
+                    'completed' => Order::where('status', 'completed')->count(),
+                    'failed' => Order::where('status', 'failed')->count(),
+                    'expired' => Order::where('status', 'expired')->count(),
+                    'cancelled' => Order::where('status', 'cancelled')->count(),
+                ]
+            ]
+        ]);
     }
 }

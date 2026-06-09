@@ -96,6 +96,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/pembayaran/qr', [PaymentController::class, 'qr'])->name('pembayaran.qr');
     Route::post('/api/update-order-status', [PaymentController::class, 'updateOrderStatus'])->name('api.update-order-status');
     Route::post('/api/check-payment-status', [PaymentController::class, 'checkPaymentStatus'])->name('api.check-payment-status');
+    Route::get('/api/orders', [PaymentController::class, 'getOrders'])->name('api.orders');
+    Route::get('/api/orders-count', [PaymentController::class, 'getOrdersCount'])->name('api.orders-count');
     Route::get('/pembayaran/success', [PaymentController::class, 'success'])->name('pembayaran.success');
     Route::get('/pembayaran/pending', [PaymentController::class, 'pending'])->name('pembayaran.pending');
     Route::get('/pembayaran/error', [PaymentController::class, 'error'])->name('pembayaran.error');
