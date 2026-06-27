@@ -179,6 +179,14 @@
             .info-grid {
                 grid-template-columns: 1fr;
             }
+            .container { padding: 16px 14px; }
+            .header h1 { font-size: 22px; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons .btn { text-align: center; }
+            .card { padding: 16px; }
+            /* Make table scrollable on mobile */
+            .items-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .items-table { min-width: 480px; }
         }
     </style>
 </head>
@@ -274,6 +282,7 @@
         <!-- Order Items -->
         <div class="card">
             <h2>Item Pesanan</h2>
+            <div class="items-table-wrap">
             <table class="items-table">
                 <thead>
                     <tr>
@@ -300,6 +309,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>{{-- .items-table-wrap --}}
         </div>
 
         <!-- Action Buttons -->

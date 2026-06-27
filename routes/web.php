@@ -123,8 +123,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('products', AdminProductController::class);
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
-    Route::post('/orders/{order}/mark-paid', [AdminOrderController::class, 'markAsPaid'])->name('orders.mark-paid');
-    Route::post('/orders/{order}/mark-completed', [AdminOrderController::class, 'markAsCompleted'])->name('orders.mark-completed');
+    Route::post('/orders/{order}/update-status', [AdminOrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::get('/sales-report', [AdminSalesReportController::class, 'index'])->name('sales-report');
 
     // Pesan Pelanggan (Customer Support)

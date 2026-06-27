@@ -1,294 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('admin.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Penjualan - CikalTas Admin</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@section('title', 'Laporan Penjualan')
 
-        body {
-            font-family: 'Nunito Sans', sans-serif;
-            background-color: #D2BBA2;
-            color: #202224;
-        }
+@section('content')
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Laporan Penjualan</h1>
+        <p class="page-subtitle">Rangkuman transaksi penjualan dan pendapatan toko</p>
+    </div>
+    <a href="{{ route('admin.dashboard') }}" class="btn-secondary">
+        <i class="fas fa-arrow-left"></i> Kembali
+    </a>
+</div>
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
+<!-- Stats Row -->
+<div class="stats-row">
+    <div class="stat-card" style="grid-column: span 2;">
+        <div class="stat-icon">💰</div>
+        <div class="stat-label">Total Pemasukan</div>
+        <div class="stat-value">Rp {{ number_format($totalRevenue, 0, ',', '.') }}</div>
+        <div class="stat-sub">Semua pemasukan dari transaksi yang sukses lunas</div>
+    </div>
+    <div class="stat-card" style="grid-column: span 2;">
+        <div class="stat-icon">📈</div>
+        <div class="stat-label">Total Transaksi</div>
+        <div class="stat-value">{{ $totalTransactions }}</div>
+        <div class="stat-sub">Jumlah pesanan yang sudah dibayar/selesai</div>
+    </div>
+</div>
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 36px;
-            font-weight: 700;
-            color: #664229;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-icon {
-            width: 40px;
-            height: 40px;
-            background-color: #664229;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-        }
-
-        .btn {
-            background-color: #664229;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            transition: background-color 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #553621;
-        }
-
-        .btn-back {
-            background-color: #606060;
-        }
-
-        .btn-back:hover {
-            background-color: #404040;
-        }
-
-        .stats-container {
-            background-color: white;
-            border-radius: 16px;
-            padding: 40px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-            border-radius: 12px;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .stat-card h3 {
-            font-size: 18px;
-            color: #606060;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .stat-card p {
-            font-size: 36px;
-            font-weight: 700;
-            color: #664229;
-        }
-
-        .orders-section {
-            margin-top: 40px;
-        }
-
-        .orders-section h2 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #664229;
-            margin-bottom: 20px;
-        }
-
-        .order-card {
-            background-color: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .order-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .order-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: #664229;
-        }
-
-        .order-customer {
-            font-size: 14px;
-            color: #606060;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .status-paid {
-            background-color: #cfe2ff;
-            color: #084298;
-        }
-
-        .status-processing {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-
-        .status-completed {
-            background-color: #d1e7dd;
-            color: #0f5132;
-        }
-
-        .order-items {
-            margin-top: 16px;
-        }
-
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .order-item:last-child {
-            border-bottom: none;
-        }
-
-        .item-name {
-            color: #202224;
-            font-weight: 500;
-        }
-
-        .item-price {
-            color: #606060;
-        }
-
-        .order-total {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 2px solid #e0e0e0;
-            font-weight: 700;
-            font-size: 18px;
-            color: #664229;
-        }
-
-        .no-orders {
-            text-align: center;
-            padding: 60px 20px;
-            background-color: white;
-            border-radius: 12px;
-            color: #606060;
-            font-size: 18px;
-        }
-    </style>
-</head>
-
-<body>
-    @include('admin.partials.navbar')
-    <div class="container">
-        <div class="header">
-            <h1>
-                <div class="header-icon">📊</div>
-                Laporan Penjualan
-            </h1>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-back">Kembali</a>
-        </div>
-
-        <div class="stats-container">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Pemasukan</h3>
-                    <p>Rp {{ number_format($totalRevenue, 0, ',', '.') }}</p>
-                </div>
-                <div class="stat-card">
-                    <h3>Total Transaksi</h3>
-                    <p>{{ $totalTransactions }}</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="orders-section">
-            @if ($orders->count() > 0)
-                @foreach ($orders as $index => $order)
-                    <div class="order-card">
-                        <div class="order-header">
-                            <div>
-                                <div class="order-title">Pesanan {{ $index + 1 }}</div>
-                                <div class="order-customer">Pelanggan: {{ $order->user->nama_lengkap }}</div>
-                            </div>
-                            @if ($order->status == 'paid')
-                                <span class="status-badge status-paid">Sudah Dibayar</span>
-                            @elseif($order->status == 'processing')
-                                <span class="status-badge status-processing">Sedang Diproses</span>
-                            @elseif($order->status == 'completed')
-                                <span class="status-badge status-completed">Selesai</span>
-                            @endif
-                        </div>
-
-                        <div class="order-items">
-                            @foreach ($order->orderItems as $item)
-                                <div class="order-item">
-                                    <span class="item-name">{{ $item->product->name }}</span>
-                                    <span class="item-price">Rp {{ number_format($item->price, 0, ',', '.') }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <div class="order-total">
-                            <span>Total</span>
-                            <span>Rp {{ number_format($order->gross_amount, 0, ',', '.') }}</span>
-                        </div>
-                    </div>
-                @endforeach
-            @else
-                <div class="no-orders">
-                    Belum ada transaksi yang selesai.
-                </div>
-            @endif
+<!-- Detailed Orders Section -->
+<div class="card">
+    <div class="card-header-row">
+        <div class="card-title">
+            <i class="fas fa-list-alt" style="color:var(--brown-light);font-size:18px;"></i> Rincian Transaksi
         </div>
     </div>
 
-    @include('admin.partials.footer')
-</body>
+    @if ($orders->count() > 0)
+        <div style="display:grid;gap:20px;">
+            @foreach ($orders as $index => $order)
+                <div style="padding:20px;background:var(--cream);border-radius:16px;border:1px solid rgba(196,149,106,0.12);">
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid var(--sand);flex-wrap:wrap;gap:10px;">
+                        <div>
+                            <div style="font-weight:700;color:var(--espresso);font-size:15px;">Pesanan #{{ $index + 1 }}</div>
+                            <div style="font-size:12px;color:var(--gray-soft);">Pelanggan: <span style="font-weight:600;color:var(--espresso);">{{ $order->user->nama_lengkap }}</span></div>
+                        </div>
+                        @if ($order->status == 'paid')
+                            <span class="badge badge-paid">Sudah Dibayar</span>
+                        @elseif($order->status == 'processing')
+                            <span class="badge badge-processing">Sedang Diproses</span>
+                        @elseif($order->status == 'completed')
+                            <span class="badge badge-completed">Selesai</span>
+                        @endif
+                    </div>
 
-</html>
+                    <div style="margin:12px 0;">
+                        @foreach ($order->orderItems as $item)
+                            <div style="display:flex;justify-content:space-between;font-size:13px;padding:6px 0;color:var(--charcoal);">
+                                <span>• {{ $item->product->name ?? 'Produk dihapus' }} ({{ $item->quantity }}x)</span>
+                                <span style="font-weight:600;">Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div style="display:flex;justify-content:space-between;padding-top:12px;border-top:1.5px solid var(--sand);font-weight:700;color:var(--espresso);font-size:15px;">
+                        <span>Total Nilai Transaksi</span>
+                        <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--brown-dark);">Rp {{ number_format($order->gross_amount, 0, ',', '.') }}</span>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <div class="empty-state">
+            <i class="fas fa-file-invoice-dollar"></i>
+            <p>Belum ada transaksi lunas/sukses.</p>
+        </div>
+    @endif
+</div>
+@endsection
+

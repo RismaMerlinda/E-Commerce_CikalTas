@@ -110,6 +110,39 @@
         .status-pending { background: rgba(255,243,205,0.8); color: #856404; }
         .status-replied { background: rgba(212,237,218,0.8); color: #155724; }
         .status-closed  { background: rgba(226,227,229,0.8); color: #383d41; }
+        
+        /* ══════════════════════════════════════════════
+           RESPONSIVE STYLE
+        ══════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .user-chat-app {
+                height: 520px;
+                max-width: 100%;
+                border-radius: 12px;
+            }
+            .chat-bubble {
+                max-width: 85%;
+                padding: 10px 14px;
+                font-size: 0.88rem;
+            }
+            .user-chat-input {
+                padding: 10px 14px;
+                gap: 10px;
+            }
+            .user-chat-input input {
+                padding: 10px 16px;
+                font-size: 0.88rem;
+            }
+            .btn-chat-send {
+                width: 38px; height: 38px;
+            }
+            .user-chat-header {
+                padding: 12px 16px;
+            }
+            .user-chat-header .title {
+                font-size: 0.95rem;
+            }
+        }
     </style>
 
     <div class="mb-4">
@@ -172,7 +205,7 @@
         function formatTime(dateString) {
             if(!dateString) return '';
             const date = new Date(dateString);
-            return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' });
         }
 
         async function sendUserMessage(e) {

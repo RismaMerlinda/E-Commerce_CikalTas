@@ -23,24 +23,31 @@ class OrderController extends Controller
         return view('admin.orders.show', compact('order'));
     }
 
-    public function markAsPaid(Order $order)
+    public function updateStatus(Request $request, Order $order)
     {
-        $order->update([
-            'status' => 'paid',
-            'paid_at' => now()
+        $request->validate([
+            'status' => 'required|in:pending,paid,processing,shipped,completed,cancelled'
         ]);
 
-        return redirect()->route('admin.orders.index')
-            ->with('success', 'Pesanan berhasil ditandai sebagai Lunas');
-    }
+        $data = ['status' => $request->status];
 
-    public function markAsCompleted(Order $order)
-    {
-        $order->update([
-            'status' => 'completed'
-        ]);
+        // If marked as paid, set paid_at if it's null
+        if ($request->status == 'paid' && is_null($order->paid_at)) {
+            $data['paid_at'] = now();
+        }
+
+        $order->update($data);
+
+        $statusLabels = [
+            'pending' => 'Menunggu Pembayaran',
+            'paid' => 'Lunas',
+            'processing' => 'Dikemas',
+            'shipped' => 'Dikirim',
+            'completed' => 'Selesai',
+            'cancelled' => 'Dibatalkan',
+        ];
 
         return redirect()->route('admin.orders.index')
-            ->with('success', 'Pesanan berhasil ditandai sebagai Selesai');
+            ->with('success', 'Status pesanan berhasil diubah menjadi ' . $statusLabels[$request->status]);
     }
 }

@@ -1,6 +1,19 @@
 <x-main-layout>
     <x-slot name="title">Pembayaran - CikalTas</x-slot>
 
+    <style>
+        @media (max-width: 640px) {
+            .bg-white.p-8 { padding: 20px !important; }
+            .bg-white.p-6 { padding: 16px !important; }
+            h1.text-3xl { font-size: 22px !important; margin-bottom: 16px !important; }
+            h2.text-2xl { font-size: 17px !important; margin-bottom: 16px !important; }
+            #paymentMethodModal > div {
+                max-height: 96vh !important;
+                margin: 8px;
+            }
+        }
+    </style>
+
     <div class="max-w-7xl mx-auto">
         <h1 class="text-3xl font-bold mb-6" style="color: #202224;">Pembayaran</h1>
 
