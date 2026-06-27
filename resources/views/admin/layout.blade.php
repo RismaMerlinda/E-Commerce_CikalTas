@@ -388,7 +388,7 @@
                         <div class="sidebar-user-role">Administrator</div>
                     </div>
                 </div>
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('logout') }}" id="logout-form">
                     @csrf
                     <button type="submit" class="sidebar-logout">
                         <i class="fas fa-sign-out-alt"></i>
@@ -405,11 +405,61 @@
         </main>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function toggleSidebar() {
             document.getElementById('adminSidebar').classList.toggle('open');
             document.getElementById('sidebarOverlay').classList.toggle('open');
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout Confirmation
+            const logoutForm = document.getElementById('logout-form');
+            if (logoutForm) {
+                logoutForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Yakin ingin keluar?',
+                        text: "Anda akan mengakhiri sesi saat ini.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#9c6e43',
+                        cancelButtonColor: '#888880',
+                        confirmButtonText: 'Ya, Keluar!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            logoutForm.submit();
+                        }
+                    })
+                });
+            }
+
+            // General Confirm Form (Delete/Update)
+            const confirmForms = document.querySelectorAll('.form-confirm');
+            confirmForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const title = this.dataset.title || 'Apakah Anda yakin?';
+                    const text = this.dataset.text || 'Tindakan ini tidak dapat dibatalkan.';
+                    
+                    Swal.fire({
+                        title: title,
+                        text: text,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#9c6e43',
+                        cancelButtonColor: '#888880',
+                        confirmButtonText: 'Ya, Lanjutkan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    })
+                });
+            });
+        });
     </script>
     @stack('scripts')
 </body>

@@ -769,10 +769,15 @@
             </button>
 
             <div class="header-search">
-                <svg class="header-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                </svg>
-                <input type="text" placeholder="Cari produk, pesanan...">
+                <form action="{{ route('beranda') }}" method="GET" style="display:flex;align-items:center;width:100%;gap:0;">
+                    <svg class="header-search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" name="q" id="search-input" placeholder="Cari produk, kategori..." value="{{ request('q') }}" autocomplete="off" style="flex:1;background:none;border:none;outline:none;">
+                    @if(request('q'))
+                        <a href="{{ route('beranda') }}" style="color:#a08060;padding:0 6px;text-decoration:none;font-size:18px;line-height:1;" title="Hapus pencarian">✕</a>
+                    @endif
+                </form>
             </div>
 
 
@@ -1095,6 +1100,65 @@
         setInterval(checkNew, 10000);
         window.addEventListener('DOMContentLoaded', checkNew);
         if (document.readyState === 'complete' || document.readyState === 'interactive') checkNew();
+    </script>
+
+    <!-- SweetAlert2 for User Side (e.g. Logout & Notifications) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // SweetAlert2 custom styling to match user side theme
+            const swalOptions = {
+                confirmButtonColor: '#8C5A35',
+                cancelButtonColor: '#a08060',
+                background: '#FFF8F2',
+                color: '#4A2C17'
+            };
+
+            // Logout Confirmation
+            const logoutForms = document.querySelectorAll('form[action="{{ route('logout') }}"]');
+            logoutForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Yakin ingin keluar?',
+                        text: "Sesi Anda akan diakhiri.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Keluar!',
+                        cancelButtonText: 'Batal',
+                        ...swalOptions
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    })
+                });
+            });
+
+            // General Confirm Form (Delete/Update)
+            const confirmForms = document.querySelectorAll('.form-confirm');
+            confirmForms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const title = this.dataset.title || 'Apakah Anda yakin?';
+                    const text = this.dataset.text || 'Tindakan ini tidak dapat dibatalkan.';
+                    
+                    Swal.fire({
+                        title: title,
+                        text: text,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, Lanjutkan!',
+                        cancelButtonText: 'Batal',
+                        ...swalOptions
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    })
+                });
+            });
+        });
     </script>
 </body>
 </html>

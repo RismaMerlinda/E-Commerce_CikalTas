@@ -457,8 +457,18 @@
 
     <!-- Section Header -->
     <div class="section-header">
-        <h2 class="section-title">Produk Pilihan</h2>
-        <div class="section-line"></div>
+        @if(!empty($search))
+            <div>
+                <h2 class="section-title">Hasil pencarian: "{{ $search }}"</h2>
+                <p style="font-size:13px;color:#a08060;margin-top:4px;">{{ $products->total() }} produk ditemukan</p>
+            </div>
+            <a href="{{ route('beranda') }}" style="font-size:13px;color:#C4956A;font-weight:600;text-decoration:none;display:flex;align-items:center;gap:6px;white-space:nowrap;">
+                ✕ Hapus filter
+            </a>
+        @else
+            <h2 class="section-title">Produk Pilihan</h2>
+            <div class="section-line"></div>
+        @endif
     </div>
 
     <!-- Products Grid -->

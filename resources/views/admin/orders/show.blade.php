@@ -317,25 +317,23 @@
             <div class="card">
                 <h2>Tindakan</h2>
                 <div class="action-buttons">
-                    <form action="{{ route('admin.orders.mark-paid', $order) }}" method="POST"
-                        onsubmit="return confirm('Tandai pesanan ini sebagai sudah dibayar?')">
-                        @csrf
-                        <button type="submit" class="btn">Tandai Lunas</button>
-                    </form>
+                        <form action="{{ route('admin.orders.mark-paid', $order) }}" method="POST" class="form-confirm" data-title="Tandai Lunas?" data-text="Yakin ingin menandai pesanan ini sebagai Lunas?">
+                            @csrf
+                            <button type="submit" class="btn-primary" style="padding:10px 20px; font-size:14px; margin-top:20px;">
+                                Tandai Lunas
+                            </button>
+                        </form>
+                    @elseif($order->status == 'paid' || $order->status == 'processing')
+                        <span class="badge badge-processing" style="font-size:14px; padding:8px 16px;">Sedang Dikemas</span>
+                        <form action="{{ route('admin.orders.mark-completed', $order) }}" method="POST" class="form-confirm" data-title="Tandai Selesai?" data-text="Yakin pesanan ini sudah sampai ke pelanggan dan ingin diselesaikan?">
+                            @csrf
+                            <button type="submit" class="btn-primary" style="padding:10px 20px; font-size:14px; margin-top:20px;">
+                                Tandai Selesai
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
-        @elseif($order->status == 'paid')
-            <div class="card">
-                <h2>Tindakan</h2>
-                <div class="action-buttons">
-                    <form action="{{ route('admin.orders.mark-completed', $order) }}" method="POST"
-                        onsubmit="return confirm('Tandai pesanan ini sebagai selesai?')">
-                        @csrf
-                        <button type="submit" class="btn">Tandai Selesai</button>
-                    </form>
-                </div>
-            </div>
-        @endif
     </div>
 
     @include('admin.partials.footer')

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class BerandaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Redirect admin ke dashboard admin
         $user = Auth::user();
@@ -16,9 +16,17 @@ class BerandaController extends Controller
             return redirect()->route('admin.dashboard');
         }
 
-        $products = Product::latest()->paginate(9);
+        $search = $request->get('q');
 
-        return view('beranda', compact('products'));
+        $products = Product::when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                      ->orWhere('category', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(12)
+            ->appends(['q' => $search]);
+
+        return view('beranda', compact('products', 'search'));
     }
 
     public function show($id)

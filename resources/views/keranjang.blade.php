@@ -337,7 +337,7 @@
                             </div>
                         </div>
 
-                        <button class="btn-remove" onclick="removeFromCart({{ $item->id }})">
+                        <button class="btn-remove" onclick="removeItem({{ $item->id }})">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                         </button>
                     </div>
@@ -371,7 +371,7 @@
                         Lanjut ke Pembayaran →
                     </a>
                     <button class="btn-clear"
-                        onclick="if(confirm('Yakin ingin mengosongkan keranjang?')) window.location.href='{{ route('keranjang.clear') }}'">
+                        onclick="Swal.fire({title:'Kosongkan Keranjang?',text:'Semua produk di keranjang akan dihapus.',icon:'warning',showCancelButton:true,confirmButtonText:'Ya, kosongkan!',cancelButtonText:'Batal',confirmButtonColor:'#8C5A35',cancelButtonColor:'#a08060',background:'#FFF8F2',color:'#4A2C17'}).then((r)=>{if(r.isConfirmed)window.location.href='{{ route('keranjang.clear') }}'})">
                         Kosongkan Keranjang
                     </button>
                 </div>
@@ -403,13 +403,38 @@
               .catch(() => alert('Gagal mengupdate keranjang'));
         }
 
-        function removeFromCart(id) {
-            if (!confirm('Yakin ingin menghapus produk ini?')) return;
-            fetch(`/keranjang/${id}`, {
-                method: 'DELETE',
-                headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content, 'Accept': 'application/json' }
-            }).then(r => r.json()).then(data => { if (data.success) location.reload(); })
-              .catch(() => alert('Gagal menghapus produk'));
+        function removeItem(id) {
+            Swal.fire({
+                title: 'Hapus Produk?',
+                text: 'Yakin ingin menghapus produk ini dari keranjang?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#8C5A35',
+                cancelButtonColor: '#a08060',
+                background: '#FFF8F2',
+                color: '#4A2C17'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/keranjang/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        }
+                    })
+                    .catch(() => {
+                        Swal.fire({ title: 'Gagal!', text: 'Gagal menghapus produk dari keranjang.', icon: 'error', confirmButtonColor: '#8C5A35' });
+                    });
+                }
+            });
         }
     </script>
 </x-main-layout>

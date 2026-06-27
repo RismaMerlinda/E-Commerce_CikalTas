@@ -89,7 +89,7 @@
                                     <i class="fas fa-pen"></i>
                                 </a>
                                 <form action="{{ route('admin.products.destroy', $product) }}" method="POST"
-                                      onsubmit="return confirm('Yakin ingin menghapus produk ini?')" style="display:inline;">
+                                      class="form-confirm" data-title="Hapus Produk?" data-text="Anda yakin ingin menghapus produk '{{ $product->name }}'? Data tidak dapat dikembalikan." style="display:inline;">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn-icon btn-icon-delete" title="Hapus">
                                         <i class="fas fa-trash"></i>
