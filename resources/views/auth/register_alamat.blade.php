@@ -380,10 +380,10 @@ body {
 
             <!-- No Telp -->
             <div class="form-group">
-                <label class="form-label" for="notelp">Nomor Telepon</label>
+                <label class="form-label" for="nomor_telepon">Nomor Telepon</label>
                 <div class="input-wrapper">
                     <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                    <input type="text" id="notelp" name="notelp" class="form-input" value="{{ old('notelp') }}" placeholder="Contoh: 081234567890">
+                    <input type="text" id="nomor_telepon" name="nomor_telepon" class="form-input" value="{{ old('nomor_telepon') }}" placeholder="Contoh: 081234567890">
                 </div>
                 <p class="error-text" id="notelpError"></p>
             </div>
@@ -393,7 +393,7 @@ body {
                 <label class="form-label" for="provinsi">Provinsi</label>
                 <div class="input-wrapper">
                     <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <select id="provinsi" name="provinsi" class="form-select">
+                    <select id="provinsi" class="form-select">
                         <option value="">Pilih Provinsi</option>
                     </select>
                 </div>
@@ -405,7 +405,7 @@ body {
                 <label class="form-label" for="kota">Kabupaten/Kota</label>
                 <div class="input-wrapper">
                     <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                    <select id="kota" name="kota" class="form-select" disabled>
+                    <select id="kota" class="form-select" disabled>
                         <option value="">Pilih Kota/Kabupaten</option>
                     </select>
                 </div>
@@ -414,10 +414,12 @@ body {
 
             <!-- Alamat Lengkap -->
             <div class="form-group">
-                <label class="form-label" for="alamat_lengkap">Alamat Lengkap</label>
-                <textarea id="alamat_lengkap" name="alamat_lengkap" class="form-textarea" placeholder="Detail alamat Anda (contoh: Patokan, No. Rumah)">{{ old('alamat_lengkap') }}</textarea>
+                <label class="form-label" for="alamat_jalan">Alamat Lengkap</label>
+                <textarea id="alamat_jalan" name="alamat_jalan" class="form-textarea" placeholder="Detail alamat Anda (contoh: Patokan, No. Rumah)">{{ old('alamat_jalan') }}</textarea>
                 <p class="error-text" id="alamatError"></p>
             </div>
+            
+            <input type="hidden" name="provinsi_kota" id="provinsi_kota">
 
             <button type="submit" class="btn-submit" id="submitBtn">
                 Daftar Sekarang
@@ -431,8 +433,8 @@ body {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
     // Load provinces
-    fetch('/api/provinsi', {
-        headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
+    fetch('https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json', {
+        headers: { 'Accept': 'application/json' }
     })
     .then(response => response.json())
     .then(data => {
@@ -455,8 +457,8 @@ body {
         kotaSelect.disabled = true;
 
         if (provId) {
-            fetch(`/api/kota/${provId}`, {
-                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken }
+            fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provId}.json`, {
+                headers: { 'Accept': 'application/json' }
             })
             .then(response => response.json())
             .then(data => {
@@ -474,7 +476,7 @@ body {
 
     document.getElementById('alamatForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const notelp = document.getElementById('notelp').value.trim();
+        const notelp = document.getElementById('nomor_telepon').value.trim();
         const prov = document.getElementById('provinsi').value;
         const kota = document.getElementById('kota').value;
         
@@ -494,6 +496,11 @@ body {
         });
 
         if (!hasError) {
+            // Set hidden field provinsi_kota
+            const provName = document.getElementById('provinsi').options[document.getElementById('provinsi').selectedIndex].text;
+            const kotaName = document.getElementById('kota').options[document.getElementById('kota').selectedIndex].text;
+            document.getElementById('provinsi_kota').value = kotaName + ', ' + provName;
+
             const btn = document.getElementById('submitBtn');
             btn.textContent = 'Memproses...';
             btn.disabled = true;
