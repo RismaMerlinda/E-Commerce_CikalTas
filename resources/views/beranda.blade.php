@@ -562,7 +562,7 @@
                         document.getElementById('modalTitle').textContent = p.name;
                         document.getElementById('modalDescription').textContent = p.description;
                         const img = document.getElementById('modalImage');
-                        img.src = p.image ? `/storage/${p.image}` : '';
+                        img.src = p.image ? '/' + p.image : '';
                         document.getElementById('productModal').classList.add('open');
                         document.body.style.overflow = 'hidden';
                     }
