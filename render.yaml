@@ -1,10 +1,10 @@
 services:
   - type: web
     name: cikaltas
-    runtime: docker
+    runtime: php
     region: singapore
     plan: free
-    dockerfilePath: ./Dockerfile
+    buildCommand: composer install --no-dev --optimize-autoloader && npm install && npm run build
     envVars:
       - key: APP_NAME
         value: CikalTas
