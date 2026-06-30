@@ -81,7 +81,7 @@
             @if ($product->image)
                 <div style="margin-bottom: 15px; padding: 15px; border-radius: 10px; background: var(--cream); display: inline-block;">
                     <p style="margin-bottom: 8px; font-size: 13px; color: var(--gray-soft);">Gambar Saat Ini:</p>
-                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" style="max-width: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" style="max-width: 200px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                 </div>
             @endif
 

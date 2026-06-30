@@ -23,7 +23,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 25,
                 'category'    => 'Ransel Pria Dewasa',
                 'color'       => 'Hitam',
-                'image'       => 'produk/ransel-pria-hitam.jpg',
+                'image'       => 'gambar/produk/ransel-pria-hitam.png',
             ],
             [
                 'name'        => 'Ransel Pria Casual Navy Minimalis',
@@ -32,7 +32,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 30,
                 'category'    => 'Ransel Pria Dewasa',
                 'color'       => 'Navy',
-                'image'       => 'produk/ransel-pria-navy.jpg',
+                'image'       => 'gambar/produk/ransel-pria-navy.png',
             ],
             [
                 'name'        => 'Ransel Pria Outdoor Olive Green',
@@ -41,7 +41,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 18,
                 'category'    => 'Ransel Pria Dewasa',
                 'color'       => 'Olive Green',
-                'image'       => 'produk/ransel-pria-olive.jpg',
+                'image'       => 'gambar/produk/ransel-pria-olive.png',
             ],
 
             // ==================== RANSEL ANAK LAKI-LAKI ====================
@@ -52,7 +52,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 40,
                 'category'    => 'Ransel Anak Laki-laki',
                 'color'       => 'Biru',
-                'image'       => 'produk/ransel-anak-cowo-biru.jpg',
+                'image'       => 'gambar/produk/ransel-anak-cowo-biru.png',
             ],
             [
                 'name'        => 'Ransel Anak Cowok Superhero Merah',
@@ -61,7 +61,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 35,
                 'category'    => 'Ransel Anak Laki-laki',
                 'color'       => 'Merah',
-                'image'       => 'produk/ransel-anak-cowo-merah.jpg',
+                'image'       => 'gambar/produk/ransel-anak-cowo-merah.png',
             ],
 
             // ==================== RANSEL ANAK PEREMPUAN ====================
@@ -72,7 +72,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 38,
                 'category'    => 'Ransel Anak Perempuan',
                 'color'       => 'Pink',
-                'image'       => 'produk/ransel-anak-cewe-pink.jpg',
+                'image'       => 'gambar/produk/ransel-anak-cewe-pink.png',
             ],
             [
                 'name'        => 'Ransel Anak Cewek Unicorn Ungu',
@@ -81,7 +81,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 32,
                 'category'    => 'Ransel Anak Perempuan',
                 'color'       => 'Ungu',
-                'image'       => 'produk/ransel-anak-cewe-ungu.jpg',
+                'image'       => 'gambar/produk/ransel-anak-cewe-ungu.png',
             ],
 
             // ==================== TAS LAPTOP ====================
@@ -92,7 +92,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 20,
                 'category'    => 'Tas Laptop',
                 'color'       => 'Abu-abu',
-                'image'       => 'produk/tas-laptop-abu.jpg',
+                'image'       => 'gambar/produk/tas-laptop-abu.png',
             ],
             [
                 'name'        => 'Tas Laptop Slim Hitam 14"',
@@ -101,7 +101,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 22,
                 'category'    => 'Tas Laptop',
                 'color'       => 'Hitam',
-                'image'       => 'produk/tas-laptop-hitam.jpg',
+                'image'       => 'gambar/produk/tas-laptop-hitam.png',
             ],
 
             // ==================== TAS SELEMPANG ====================
@@ -112,7 +112,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 28,
                 'category'    => 'Tas Selempang',
                 'color'       => 'Coklat',
-                'image'       => 'produk/tas-selempang-pria-coklat.jpg',
+                'image'       => 'gambar/produk/tas-selempang-pria-coklat.png',
             ],
             [
                 'name'        => 'Tas Selempang Wanita Hitam Elegan',
@@ -121,7 +121,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 25,
                 'category'    => 'Tas Selempang',
                 'color'       => 'Hitam',
-                'image'       => 'produk/tas-selempang-wanita-hitam.jpg',
+                'image'       => 'gambar/produk/tas-selempang-wanita-hitam.png',
             ],
 
             // ==================== TAS WANITA ====================
@@ -132,7 +132,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 22,
                 'category'    => 'Tas Tote',
                 'color'       => 'Krem',
-                'image'       => 'produk/tas-tote-krem.jpg',
+                'image'       => 'gambar/produk/tas-tote-krem.png',
             ],
             [
                 'name'        => 'Tas Kulit Wanita Shoulder Brown',
@@ -141,7 +141,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 15,
                 'category'    => 'Tas Wanita',
                 'color'       => 'Coklat',
-                'image'       => 'produk/tas-kulit-coklat.jpg',
+                'image'       => 'gambar/produk/tas-kulit-coklat.png',
             ],
 
             // ==================== TAS CLUTCH ====================
@@ -152,7 +152,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 20,
                 'category'    => 'Tas Clutch',
                 'color'       => 'Hitam',
-                'image'       => 'produk/tas-clutch-hitam.jpg',
+                'image'       => 'gambar/produk/tas-clutch-hitam.png',
             ],
             [
                 'name'        => 'Tas Wanita Sling Mini Elegan',
@@ -161,7 +161,7 @@ class ProductSeeder extends Seeder
                 'stock'       => 30,
                 'category'    => 'Tas Wanita',
                 'color'       => 'Hijau Emerald',
-                'image'       => 'produk/tas-wanita-elegan.jpg',
+                'image'       => 'gambar/produk/tas-wanita-elegan.png',
             ],
         ];
 

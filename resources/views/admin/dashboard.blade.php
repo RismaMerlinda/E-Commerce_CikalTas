@@ -106,7 +106,7 @@
                         {{ $i + 1 }}
                     </div>
                     @if($item->product)
-                        <img src="{{ $item->product->image ? asset('storage/'.$item->product->image) : asset('gambar/Logo.png') }}"
+                        <img src="{{ $item->product->image ? asset($item->product->image) : asset('gambar/Logo.png') }}"
                              class="product-thumb" alt="{{ $item->product->name }}"
                              onerror="this.src='{{ asset('gambar/Logo.png') }}'">
                         <div style="flex:1;overflow:hidden;">

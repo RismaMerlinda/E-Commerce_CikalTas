@@ -42,7 +42,7 @@
                     <tr>
                         <td>
                             @if ($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}"
+                                <img src="{{ asset($product->image) }}"
                                      alt="{{ $product->name }}" class="product-thumb"
                                      onerror="this.src='{{ asset('gambar/Logo.png') }}'">
                             @else

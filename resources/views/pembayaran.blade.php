@@ -28,7 +28,7 @@
                             <div class="flex gap-4 pb-4 border-b" style="border-color: #E5E5E5;">
                                 <div class="w-20 h-20 bg-gray-100 rounded-lg flex-shrink-0 overflow-hidden">
                                     @if ($item->product->image)
-                                        <img src="{{ asset('storage/' . $item->product->image) }}"
+                                        <img src="{{ asset($item->product->image) }}"
                                             alt="{{ $item->product->name }}" class="w-full h-full object-contain p-1">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center">

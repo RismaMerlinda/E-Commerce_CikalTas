@@ -1591,7 +1591,7 @@
         <div class="hero-right">
             <div class="hero-img-clip">
                 @if($heroProduct && $heroProduct->image)
-                    <img src="{{ asset('storage/' . $heroProduct->image) }}" 
+                    <img src="{{ asset($heroProduct->image) }}" 
                          alt="{{ $heroProduct->name }}" class="hero-img-main" style="mix-blend-mode: normal;">
                 @else
                     <img src="{{ asset('gambar/hero_bag.png') }}" 
@@ -1688,7 +1688,7 @@
                             </span>
                         </div>
                         @if($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
                         @else
                             <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:var(--sand);">
                                 <svg width="80" height="80" fill="none" stroke="#c4956a" viewBox="0 0 24 24" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>

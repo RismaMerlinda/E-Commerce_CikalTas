@@ -477,7 +477,7 @@
             <div class="product-card">
                 <div class="product-img-wrap">
                     @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}">
+                        <img src="{{ asset($product->image) }}" alt="{{ $product->name }}">
                     @else
                         <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
                             <svg style="width:64px;height:64px;color:#d4b89a;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
