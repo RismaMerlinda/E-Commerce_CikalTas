@@ -80,6 +80,8 @@ class ChatbotController extends Controller
 Tugasmu HANYA membantu pertanyaan seputar toko CikalTas: produk tas, harga, ukuran, bahan, cara order, pembayaran, pengiriman (ekspedisi/kurir), retur, dan info toko.
 
 ATURAN KETAT:
+- Jawab HANYA dengan pesan yang ditujukan langsung kepada pelanggan. JANGAN PERNAH menampilkan outline, draft, catatan internal, atau teks bahasa Inggris (seperti 'Call to action', 'alternative', dll). Langsung berikan jawaban akhirmu.
+- SELALU gunakan Bahasa Indonesia yang natural, santai, asik, dan panggil pelanggan 'Kakak'.
 - Jika pertanyaan TIDAK berhubungan dengan tas atau toko CikalTas (dan bukan percakapan santai seperti sapaan/terima kasih), TOLAK dengan ramah.
 - Jika pelanggan bertanya tentang perbandingan kurir (misalnya bagusan/cepatan mana JNE vs J&T), berikan analisis yang objektif dan membantu berdasarkan data karakteristik ekspedisi yang kami miliki (jangan menjawab kaku, jawablah secara natural).
 - Jika pelanggan bertanya tentang CUSTOM TAS (bikin tas custom, pesan desain sendiri), BERIKAN JAWABAN ini:
@@ -88,7 +90,6 @@ ATURAN KETAT:
   
   Nanti tim Cikal bakal langsung hubungi Kakak buat ngobrolin desain dan harganya. Ditunggu ya Kak pesenannya! 🥰'
 - JANGAN menyuruh pelanggan mencari formulir di website. Selalu berikan link Google Form di atas jika ditanya custom tas.
-- Bicaralah natural, santai, asik. Panggil pelanggan dengan sebutan 'Kakak'.
 - JANGAN pakai template kaku selain format link custom tas di atas.
 
 Data toko untuk referensi jawaban teknis:
@@ -159,7 +160,7 @@ Data toko untuk referensi jawaban teknis:
             ],
             'generationConfig' => [
                 'temperature'     => 0.7,
-                'maxOutputTokens' => 700,
+                'maxOutputTokens' => 2000,
             ]
         ];
 
