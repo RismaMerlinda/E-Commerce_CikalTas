@@ -41,6 +41,21 @@ Route::get('/', function () {
     return view('welcome', compact('featuredProducts', 'categories', 'heroProduct'));
 });
 
+Route::get('/fix-images', function() {
+    $products = \App\Models\Product::all();
+    $count = 0;
+    foreach ($products as $product) {
+        if ($product->image) {
+            $newImage = str_replace(['produk/', '.jpg'], ['gambar/produk/', '.png'], $product->image);
+            if ($newImage !== $product->image) {
+                $product->update(['image' => $newImage]);
+                $count++;
+            }
+        }
+    }
+    return "Berhasil update $count path gambar! Silakan kembali ke beranda.";
+});
+
 // Auth routes (login, logout, forgot password, etc.) - Laravel Breeze or default auth
 require __DIR__ . '/auth.php';
 
