@@ -43,17 +43,19 @@ Route::get('/', function () {
 
 Route::get('/fix-images', function() {
     $products = \App\Models\Product::all();
+    $output = "Total produk: " . $products->count() . "<br><br>";
     $count = 0;
     foreach ($products as $product) {
-        if ($product->image) {
-            $newImage = str_replace(['produk/', '.jpg'], ['gambar/produk/', '.png'], $product->image);
-            if ($newImage !== $product->image) {
-                $product->update(['image' => $newImage]);
-                $count++;
-            }
-        }
+        $oldImage = $product->image;
+        $newImage = str_replace(['produk/', '.jpg'], ['gambar/produk/', '.png'], $oldImage);
+        
+        // Force update just in case
+        $product->update(['image' => $newImage]);
+        $count++;
+        
+        $output .= "ID {$product->id}: {$oldImage} => {$product->image} <br>";
     }
-    return "Berhasil update $count path gambar! Silakan kembali ke beranda.";
+    return $output . "<br>Berhasil update $count path gambar! Silakan kembali ke beranda.";
 });
 
 // Auth routes (login, logout, forgot password, etc.) - Laravel Breeze or default auth
